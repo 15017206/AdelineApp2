@@ -1,11 +1,13 @@
 package com.example.a15017206.adelineapp2;
 
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -30,6 +32,7 @@ import android.widget.SeekBar;
 
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -90,7 +93,6 @@ public class MainActivity extends AppCompatActivity {
                     Log.i(TAG, "result is: " + result);
 
 
-
                     JSONObject jsonObject = new JSONObject(result);
                     JSONArray array_findItemsByKeywordsResponse = (JSONArray) jsonObject.get("findItemsByKeywordsResponse");
 
@@ -132,7 +134,6 @@ public class MainActivity extends AppCompatActivity {
                                     }
                                 }
 
-
                                 JSONArray array_sellingStatus = (JSONArray) jsonObject3.get("sellingStatus");
                                 for (int l = 0; l < array_sellingStatus.length(); l++) {
 
@@ -157,7 +158,13 @@ public class MainActivity extends AppCompatActivity {
                                     searchResult2.setImageView(galleryURL);
                                 }
 
+                                JSONArray array_viewItemURL = (JSONArray) jsonObject3.get("viewItemURL");
+                                for (int l = 0; l < array_viewItemURL.length(); l++) {
 
+                                    String viewItemURL = array_viewItemURL.getString(l);
+                                    Log.i(TAG, "inside viewItemURL: " + viewItemURL);
+                                    searchResult2.setViewItemURL(viewItemURL);
+                                }
 
                                 searchResult.add(searchResult2);
                             }
@@ -175,8 +182,19 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        customlv1.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                SearchResult selected_searchResult = searchResult.get(i);
 
+                Intent a = new Intent(MainActivity.this, WebsiteActivity.class);
+                a.putExtra("url",selected_searchResult.getViewItemURL());
+                startActivity(a);
+
+            }
+        });
     }
+
 
     public class HttpGetRequest extends AsyncTask<String, Void, String> {
 

@@ -12,13 +12,15 @@ class SearchResult {
     private String tvSubtitle;
     private String tvPrice;
     private String tvShipping;
+    private String viewItemURL;
 
-    public SearchResult(String imageView, String tvTitle, String tvSubtitle, String tvPrice, String tvShipping) {
+    public SearchResult(String imageView, String tvTitle, String tvSubtitle, String tvPrice, String tvShipping, String viewItemURL) {
         this.imageView = imageView;
         this.tvTitle = tvTitle;
         this.tvSubtitle = tvSubtitle;
         this.tvPrice = tvPrice;
         this.tvShipping = tvShipping;
+        this.viewItemURL = viewItemURL;
     }
 
     public SearchResult() {
@@ -62,5 +64,13 @@ class SearchResult {
 
     public void setTvShipping(String tvShipping) {
         this.tvShipping = tvShipping;
+    }
+
+    public String getViewItemURL() {
+        return viewItemURL;
+    }
+
+    public void setViewItemURL(String viewItemURL) {
+        this.viewItemURL = viewItemURL;
     }
 }
