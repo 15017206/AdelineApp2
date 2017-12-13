@@ -7,13 +7,13 @@ import android.widget.ImageView;
  */
 
 class SearchResult {
-    private int imageView;
+    private String imageView;
     private String tvTitle;
     private String tvSubtitle;
     private String tvPrice;
     private String tvShipping;
 
-    public SearchResult(int imageView, String tvTitle, String tvSubtitle, String tvPrice, String tvShipping) {
+    public SearchResult(String imageView, String tvTitle, String tvSubtitle, String tvPrice, String tvShipping) {
         this.imageView = imageView;
         this.tvTitle = tvTitle;
         this.tvSubtitle = tvSubtitle;
@@ -24,7 +24,7 @@ class SearchResult {
     public SearchResult() {
     }
 
-    public int getImageView() {
+    public String getImageView() {
         return imageView;
     }
 
@@ -44,7 +44,7 @@ class SearchResult {
         return tvShipping;
     }
 
-    public void setImageView(int imageView) {
+    public void setImageView(String imageView) {
         this.imageView = imageView;
     }
 

@@ -54,8 +54,8 @@ public class SearchResultAdapter extends ArrayAdapter<SearchResult> {
         tvPrice.setText(current_searchResult.getTvPrice());
         tvSubtitle.setText(current_searchResult.getTvSubtitle());
 
-//        Picasso.with(context).load(current_searchResult.getImageView()).into(imageView);
-        imageView.setImageResource(current_searchResult.getImageView());
+        Picasso.with(context).load(current_searchResult.getImageView()).into(imageView);
+//        imageView.setImageResource(current_searchResult.getImageView());
         // Set the image to star or nostar accordingly
 //        if (currentModule.isProgramming()) {
 //            iv.setImageResource(R.drawable.prog);

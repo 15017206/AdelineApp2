@@ -49,8 +49,8 @@ public class MainActivity extends AppCompatActivity {
 
 
         // These're fake data
-        searchResult.add(new SearchResult(R.drawable.star, "Title1", "Subtitle1", "$150.00", "Yes"));
-        searchResult.add(new SearchResult(R.drawable.nostar, "Title2", "Subtitle2", "$250.00", "No"));
+//        searchResult.add(new SearchResult(R.drawable.star, "Title1", "Subtitle1", "$150.00", "Yes"));
+//        searchResult.add(new SearchResult(R.drawable.nostar, "Title2", "Subtitle2", "$250.00", "No"));
 
         String appName = "?SECURITY-APPNAME=" + "GlennYeo-Software-PRD-35d705b3d-b15b0374";
         String operationName = "&OPERATION-NAME=" + "findItemsByKeywords";
@@ -58,8 +58,8 @@ public class MainActivity extends AppCompatActivity {
         String responseDataFormat = "&RESPONSE-DATA-FORMAT=" + "JSON";
 //        String callBack = "&callback=" + "_cb_findItemsByKeywords";
         String callBack = "";
-        String keywords = "&keywords=" + "iPhone";
-        String paginationInputentriesPerPage = "&paginationInput.entriesPerPage=" + "1";
+        String keywords = "&keywords=" + "drones";
+        String paginationInputentriesPerPage = "&paginationInput.entriesPerPage=" + "13";
         String paginationInputpageNumber = "&paginationInput.pageNumber=" + "1";
         String globalid = "&GLOBAL-ID=" + "EBAY-US";
 
@@ -133,7 +133,13 @@ public class MainActivity extends AppCompatActivity {
                             }
                         }
 
-                        //TAKING VARIABLES AND ADDING THEM INTO PROPER VARIABLES FOR DISPLAYING
+                        JSONArray array_galleryURL = (JSONArray) jsonObject3.get("galleryURL");
+                        for (int l=0; l<array_galleryURL.length();l++){
+
+                            String galleryURL = array_galleryURL.getString(l);
+                            Log.i(TAG, "inside galleryURL: " + galleryURL);
+                            searchResult2.setImageView(galleryURL);
+                        }
 
 
 
