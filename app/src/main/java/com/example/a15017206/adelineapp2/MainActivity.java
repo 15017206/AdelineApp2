@@ -1,0 +1,211 @@
+package com.example.a15017206.adelineapp2;
+
+import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.ListView;
+
+import org.json.simple.parser.JSONParser;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Iterator;
+
+public class MainActivity extends AppCompatActivity {
+    String TAG = "";
+
+    EditText etSearch1;
+    Button btnSearch1;
+    ListView customlv1;
+    ArrayList<SearchResult> searchResult = new ArrayList<>();
+    ArrayAdapter aa;
+    ImageView iv2;
+
+    String title, subtitle, price, shipping;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        etSearch1 = findViewById(R.id.et_Search1);
+        btnSearch1 = findViewById(R.id.btnSearch);
+        customlv1 = findViewById(R.id.customlv1);
+
+//        Picasso.with(this).load("http://st1.vchensubeswogfpjoq.netdna-cdn.com/wp-content/uploads/2014/11/Picasso-Image-Downloader.png").into(iv2);
+
+
+        // These're fake data
+        searchResult.add(new SearchResult(R.drawable.star, "Title1", "Subtitle1", "$150.00", "Yes"));
+        searchResult.add(new SearchResult(R.drawable.nostar, "Title2", "Subtitle2", "$250.00", "No"));
+
+        String appName = "?SECURITY-APPNAME=" + "GlennYeo-Software-PRD-35d705b3d-b15b0374";
+        String operationName = "&OPERATION-NAME=" + "findItemsByKeywords";
+        String serviceVersion = "&SERVICE-VERSION=" + "1.0.0";
+        String responseDataFormat = "&RESPONSE-DATA-FORMAT=" + "JSON";
+//        String callBack = "&callback=" + "_cb_findItemsByKeywords";
+        String callBack = "";
+        String keywords = "&keywords=" + "iPhone";
+        String paginationInputentriesPerPage = "&paginationInput.entriesPerPage=" + "1";
+        String paginationInputpageNumber = "&paginationInput.pageNumber=" + "1";
+        String globalid = "&GLOBAL-ID=" + "EBAY-US";
+
+        String totalParams = appName + operationName + serviceVersion + responseDataFormat + callBack + keywords + paginationInputentriesPerPage + paginationInputpageNumber + globalid;
+
+        //Some url endpoint that you may have
+        String myUrl = "https://svcs.ebay.com/services/search/FindingService/v1" + totalParams;
+
+        //String to place our result in
+        String result = "";
+
+        //Instantiate new instance of our class
+        HttpGetRequest getRequest = new HttpGetRequest();
+
+        //Perform the doInBackground method, passing in our url
+        try {
+            result = getRequest.execute(myUrl).get();
+            Log.i(TAG, "result is: " + result);
+
+            JSONObject jsonObject = new JSONObject(result);
+            JSONArray array_findItemsByKeywordsResponse = (JSONArray) jsonObject.get("findItemsByKeywordsResponse");
+
+            for (int i = 0; i < array_findItemsByKeywordsResponse.length(); i++) {
+                JSONObject jsonObject1 = array_findItemsByKeywordsResponse.getJSONObject(i);
+                Log.i(TAG, "inside findItemsBy: " + jsonObject1);
+
+                JSONArray array_searchResult = (JSONArray) jsonObject1.get("searchResult");
+
+                for (int j = 0; j < array_searchResult.length(); j++) {
+                    JSONObject jsonObject2 = array_searchResult.getJSONObject(j);
+                    Log.i(TAG, "inside searchResult: " + jsonObject2);
+
+
+                    JSONArray array_item = (JSONArray) jsonObject2.get("item");
+
+                    for (int k = 0; k < array_item.length(); k++) {
+                        JSONObject jsonObject3 = array_item.getJSONObject(k);
+                        Log.i(TAG, "inside item: " + jsonObject3);
+
+                        JSONArray array_title = (JSONArray) jsonObject3.get("title");
+                        JSONArray array_subtitle = (JSONArray) jsonObject3.get("subtitle");
+                        JSONArray array_currencyID = (JSONArray) jsonObject3.get("sellingStatus");
+//                        JSONArray array__value__ = (JSONArray) jsonObject3.get("__value__");
+
+                        JSONArray array_sellingStatus = (JSONArray) jsonObject3.get("sellingStatus");
+
+                        for (int l = 0; l < array_sellingStatus.length(); l++) {
+                            JSONObject jsonObject4 = array_sellingStatus.getJSONObject(l);
+
+                            JSONArray array_currentPrice = (JSONArray) jsonObject4.get("currentPrice");
+
+                            for (int m = 0; m < array_currentPrice.length(); m++) {
+                                JSONObject jsonObject5 = array_currentPrice.getJSONObject(m);
+                                String currencyID = jsonObject5.getString("@currencyId");
+                                String __value__ = jsonObject5.getString("__value__");
+                            }
+                        }
+
+//TAKING VARIABLES AND ADDING THEM INTO PROPER VARIABLES FOR DISPLAYING
+                        SearchResult searchResult2 = new SearchResult();
+
+                        for (int l = 0; l < array_title.length(); l++) {
+                            String x = array_title.getString(i);
+                            searchResult2.setTvTitle(x);
+                            Log.i(TAG, "title is: " + x);
+                        }
+
+                        for (int l = 0; l < array_subtitle.length(); l++) {
+                            String x = array_subtitle.getString(i);
+                            searchResult2.setTvSubtitle(x);
+                        }
+
+
+
+                        searchResult.add(searchResult2);
+
+                    }
+                }
+
+            }
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        aa = new SearchResultAdapter(this, R.layout.search_result_layout_row, searchResult);
+        customlv1.setAdapter(aa);
+    }
+
+    public class HttpGetRequest extends AsyncTask<String, Void, String> {
+
+        public static final String REQUEST_METHOD = "GET";
+        public static final int READ_TIMEOUT = 15000;
+        public static final int CONNECTION_TIMEOUT = 15000;
+
+        @Override
+        protected String doInBackground(String... params) {
+            String stringUrl = params[0];
+            String result;
+            String inputLine;
+
+            try {
+                //Create a URL object holding our url
+                URL myUrl = new URL(stringUrl);
+
+                //Create a connection
+                HttpURLConnection connection = (HttpURLConnection) myUrl.openConnection();
+
+                //Set methods and timeouts
+                connection.setRequestMethod(REQUEST_METHOD);
+                connection.setReadTimeout(READ_TIMEOUT);
+                connection.setConnectTimeout(CONNECTION_TIMEOUT);
+
+                //Connect to our url
+                connection.connect();
+
+                //Create a new InputStreamReader
+                InputStreamReader streamReader = new InputStreamReader(connection.getInputStream());
+
+                //Create a new buffered reader and String Builder
+                BufferedReader reader = new BufferedReader(streamReader);
+                StringBuilder stringBuilder = new StringBuilder();
+
+                //Check if the line we are reading is not null
+                while ((inputLine = reader.readLine()) != null) {
+                    stringBuilder.append(inputLine);
+                }
+
+                //Close our InputStream and Buffered reader
+                reader.close();
+                streamReader.close();
+
+                //Set our result equal to our stringBuilder
+                result = stringBuilder.toString();
+            } catch (Exception e) {
+                e.printStackTrace();
+                result = "";
+            }
+
+            return result;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+        }
+    }
+}
