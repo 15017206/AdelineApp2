@@ -79,6 +79,8 @@ public class MainActivity extends AppCompatActivity {
             result = getRequest.execute(myUrl).get();
             Log.i(TAG, "result is: " + result);
 
+            SearchResult searchResult2 = new SearchResult();
+
             JSONObject jsonObject = new JSONObject(result);
             JSONArray array_findItemsByKeywordsResponse = (JSONArray) jsonObject.get("findItemsByKeywordsResponse");
 
@@ -101,36 +103,38 @@ public class MainActivity extends AppCompatActivity {
 
                         JSONArray array_title = (JSONArray) jsonObject3.get("title");
                         JSONArray array_subtitle = (JSONArray) jsonObject3.get("subtitle");
-                        JSONArray array_currencyID = (JSONArray) jsonObject3.get("sellingStatus");
-//                        JSONArray array__value__ = (JSONArray) jsonObject3.get("__value__");
 
-                        JSONArray array_sellingStatus = (JSONArray) jsonObject3.get("sellingStatus");
-
-                        for (int l = 0; l < array_sellingStatus.length(); l++) {
-                            JSONObject jsonObject4 = array_sellingStatus.getJSONObject(l);
-
-                            JSONArray array_currentPrice = (JSONArray) jsonObject4.get("currentPrice");
-
-                            for (int m = 0; m < array_currentPrice.length(); m++) {
-                                JSONObject jsonObject5 = array_currentPrice.getJSONObject(m);
-                                String currencyID = jsonObject5.getString("@currencyId");
-                                String __value__ = jsonObject5.getString("__value__");
-                            }
-                        }
-
-//TAKING VARIABLES AND ADDING THEM INTO PROPER VARIABLES FOR DISPLAYING
-                        SearchResult searchResult2 = new SearchResult();
-
+                        // Set text for Title
                         for (int l = 0; l < array_title.length(); l++) {
                             String x = array_title.getString(i);
                             searchResult2.setTvTitle(x);
                             Log.i(TAG, "title is: " + x);
                         }
 
+                        // Set text for Subtitle
                         for (int l = 0; l < array_subtitle.length(); l++) {
                             String x = array_subtitle.getString(i);
                             searchResult2.setTvSubtitle(x);
                         }
+
+                        JSONArray array_sellingStatus = (JSONArray) jsonObject3.get("sellingStatus");
+                        for (int l = 0; l < array_sellingStatus.length(); l++) {
+
+                            JSONObject jsonObject4 = array_sellingStatus.getJSONObject(l);
+                            JSONArray array_currentPrice = (JSONArray) jsonObject4.get("currentPrice");
+
+                            // Set text for currency + value
+                            for (int m = 0; m < array_currentPrice.length(); m++) {
+                                JSONObject jsonObject5 = array_currentPrice.getJSONObject(m);
+                                String currencyID = jsonObject5.getString("@currencyId");
+                                String __value__ = jsonObject5.getString("__value__");
+
+                                searchResult2.setTvPrice(currencyID + " " + __value__);
+                            }
+                        }
+
+                        //TAKING VARIABLES AND ADDING THEM INTO PROPER VARIABLES FOR DISPLAYING
+
 
 
 
