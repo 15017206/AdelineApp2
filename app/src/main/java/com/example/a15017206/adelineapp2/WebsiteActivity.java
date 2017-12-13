@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 
 public class WebsiteActivity extends AppCompatActivity {
 
@@ -18,7 +19,7 @@ public class WebsiteActivity extends AppCompatActivity {
 
         Intent i = getIntent();
         String url = i.getStringExtra("url");
-
+        webView.setWebViewClient(new WebViewClient());
         webView.getSettings().setJavaScriptEnabled(true);
         webView.loadUrl(url);
 
