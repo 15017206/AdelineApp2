@@ -30,23 +30,41 @@
             android:hint='"iPhone", "watch", etc'
             android:inputType="textPersonName" />
 
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Show the first" />
+
+            <EditText
+                android:id="@+id/etProductAmount"
+                android:layout_width="161dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ems="10"
+                android:hint="eg. 10/25/50"
+                android:inputType="number"
+                android:text="10"
+                android:textAlignment="center" />
+
+            <TextView
+                android:id="@+id/textView3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="products" />
+        </LinearLayout>
+
         <Button
             android:id="@+id/btnSearch"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Search" />
-
-        <TextView
-            android:id="@+id/tv_seekbarhelper"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Show:" />
-
-        <SeekBar
-            android:id="@+id/sbNoOfEntries"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:max="1000" />
 
         <ListView
             android:id="@+id/customlv1"

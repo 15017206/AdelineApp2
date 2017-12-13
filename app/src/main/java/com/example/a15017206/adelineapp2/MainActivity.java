@@ -35,7 +35,7 @@ import android.widget.TextView;
 public class MainActivity extends AppCompatActivity {
     String TAG = "";
 
-    EditText etSearch1;
+    EditText etSearch1, etProductAmount;
     Button btnSearch1;
     ListView customlv1;
     ArrayList<SearchResult> searchResult = new ArrayList<>();
@@ -52,32 +52,12 @@ public class MainActivity extends AppCompatActivity {
         etSearch1 = findViewById(R.id.et_Search1);
         btnSearch1 = findViewById(R.id.btnSearch);
         customlv1 = findViewById(R.id.customlv1);
-        seekBar = findViewById(R.id.sbNoOfEntries);
-        tv_seekbar_helper = findViewById(R.id.tv_seekbarhelper);
-
-        seekBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
-tv_seekbar_helper.setText("Change to: " + i + " products");
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-btnSearch1.performClick();
-            }
-        });
-
+        etProductAmount = findViewById(R.id.etProductAmount);
 
         btnSearch1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 searchResult.clear();
-
                 // These're fake data
 //        searchResult.add(new SearchResult(R.drawable.star, "Title1", "Subtitle1", "$150.00", "Yes"));
 //        searchResult.add(new SearchResult(R.drawable.nostar, "Title2", "Subtitle2", "$250.00", "No"));
@@ -89,7 +69,7 @@ btnSearch1.performClick();
 //        String callBack = "&callback=" + "_cb_findItemsByKeywords";
                 String callBack = "";
                 String keywords = "&keywords=" + etSearch1.getText().toString();
-                String paginationInputentriesPerPage = "&paginationInput.entriesPerPage=" + "13";
+                String paginationInputentriesPerPage = "&paginationInput.entriesPerPage=" + etProductAmount.getText().toString();
                 String paginationInputpageNumber = "&paginationInput.pageNumber=" + "1";
                 String globalid = "&GLOBAL-ID=" + "EBAY-US";
 
@@ -109,7 +89,7 @@ btnSearch1.performClick();
                     result = getRequest.execute(myUrl).get();
                     Log.i(TAG, "result is: " + result);
 
-                    SearchResult searchResult2 = new SearchResult();
+
 
                     JSONObject jsonObject = new JSONObject(result);
                     JSONArray array_findItemsByKeywordsResponse = (JSONArray) jsonObject.get("findItemsByKeywordsResponse");
@@ -124,7 +104,6 @@ btnSearch1.performClick();
                             JSONObject jsonObject2 = array_searchResult.getJSONObject(j);
                             Log.i(TAG, "inside searchResult: " + jsonObject2);
 
-
                             JSONArray array_item = (JSONArray) jsonObject2.get("item");
 
                             for (int k = 0; k < array_item.length(); k++) {
@@ -133,6 +112,9 @@ btnSearch1.performClick();
 
                                 // Retrieve & Set text for Title
                                 JSONArray array_title = (JSONArray) jsonObject3.get("title");
+
+                                //This must not be anyhow moved!!
+                                SearchResult searchResult2 = new SearchResult();
 
                                 for (int l = 0; l < array_title.length(); l++) {
                                     String x = array_title.getString(i);
@@ -176,8 +158,8 @@ btnSearch1.performClick();
                                 }
 
 
-                                searchResult.add(searchResult2);
 
+                                searchResult.add(searchResult2);
                             }
                         }
 
