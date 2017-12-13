@@ -1,5 +1,6 @@
 package com.example.a15017206.adelineapp2;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
@@ -7,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -179,6 +181,9 @@ public class MainActivity extends AppCompatActivity {
 
                 aa = new SearchResultAdapter(MainActivity.this, R.layout.search_result_layout_row, searchResult);
                 customlv1.setAdapter(aa);
+
+                InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
             }
         });
 
@@ -190,6 +195,7 @@ public class MainActivity extends AppCompatActivity {
                 Intent a = new Intent(MainActivity.this, WebsiteActivity.class);
                 a.putExtra("url",selected_searchResult.getViewItemURL());
                 startActivity(a);
+
 
             }
         });
