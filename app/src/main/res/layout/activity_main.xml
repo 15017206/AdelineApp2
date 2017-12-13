@@ -36,6 +36,18 @@
             android:layout_height="wrap_content"
             android:text="Search" />
 
+        <TextView
+            android:id="@+id/tv_seekbarhelper"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Show:" />
+
+        <SeekBar
+            android:id="@+id/sbNoOfEntries"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:max="1000" />
+
         <ListView
             android:id="@+id/customlv1"
             android:layout_width="match_parent"
