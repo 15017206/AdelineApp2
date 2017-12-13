@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
         String responseDataFormat = "&RESPONSE-DATA-FORMAT=" + "JSON";
 //        String callBack = "&callback=" + "_cb_findItemsByKeywords";
         String callBack = "";
-        String keywords = "&keywords=" + "drones";
+        String keywords = "&keywords=" + "soap";
         String paginationInputentriesPerPage = "&paginationInput.entriesPerPage=" + "13";
         String paginationInputpageNumber = "&paginationInput.pageNumber=" + "1";
         String globalid = "&GLOBAL-ID=" + "EBAY-US";
@@ -101,21 +101,26 @@ public class MainActivity extends AppCompatActivity {
                         JSONObject jsonObject3 = array_item.getJSONObject(k);
                         Log.i(TAG, "inside item: " + jsonObject3);
 
+                        // Retrieve & Set text for Title
                         JSONArray array_title = (JSONArray) jsonObject3.get("title");
-                        JSONArray array_subtitle = (JSONArray) jsonObject3.get("subtitle");
 
-                        // Set text for Title
                         for (int l = 0; l < array_title.length(); l++) {
                             String x = array_title.getString(i);
                             searchResult2.setTvTitle(x);
                             Log.i(TAG, "title is: " + x);
                         }
 
-                        // Set text for Subtitle
-                        for (int l = 0; l < array_subtitle.length(); l++) {
-                            String x = array_subtitle.getString(i);
-                            searchResult2.setTvSubtitle(x);
+                        // SOME ENTRIES HAVE NO SUBTITLE- CHECK IF SUBTITLE KEY EXISTS!
+                        if (jsonObject3.has("subtitle")){
+                            // Retrieve & Set text for Subtitle
+                            JSONArray array_subtitle = (JSONArray) jsonObject3.get("subtitle");
+                            for (int l = 0; l < array_subtitle.length(); l++) {
+                                String x = array_subtitle.getString(i);
+                                searchResult2.setTvSubtitle(x);
+                            }
                         }
+
+
 
                         JSONArray array_sellingStatus = (JSONArray) jsonObject3.get("sellingStatus");
                         for (int l = 0; l < array_sellingStatus.length(); l++) {
@@ -134,14 +139,12 @@ public class MainActivity extends AppCompatActivity {
                         }
 
                         JSONArray array_galleryURL = (JSONArray) jsonObject3.get("galleryURL");
-                        for (int l=0; l<array_galleryURL.length();l++){
+                        for (int l = 0; l < array_galleryURL.length(); l++) {
 
                             String galleryURL = array_galleryURL.getString(l);
                             Log.i(TAG, "inside galleryURL: " + galleryURL);
                             searchResult2.setImageView(galleryURL);
                         }
-
-
 
 
                         searchResult.add(searchResult2);
